@@ -11,12 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Surface
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.logindemousingcompose.R
 import com.example.logindemousingcompose.components.ButtonComponent
 import com.example.logindemousingcompose.components.ClickableLoginTextComponent
@@ -33,9 +38,17 @@ import com.example.logindemousingcompose.navigation.Screen
 
 
 @Composable
-fun Login()  {
+fun Login(navController: NavHostController) {
     val context = LocalContext.current;
-    val viewModel: LoginViewModel = androidx.hilt.navigation.compose.hiltViewModel() // ✅ Add this line
+    val viewModel: LoginViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    val loginSuccess by viewModel.loginSuccess
+
+    // ✅ Navigate on success
+    LaunchedEffect(loginSuccess) {
+        if (loginSuccess) {
+                navController.navigate("signup")
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -51,15 +64,17 @@ fun Login()  {
             MyTextFieldComponent(labelValue = stringResource(R.string.email),
                 painterResource = painterResource(id = R.drawable.email),
                 onTextSelected = {
-
-                }
+                    viewModel.onEvent(UIEvent.EmailChanged(it))
+                },
+                errorStatus = viewModel.registrationUIState.value.emailError
             )
 
             PasswordTextComponent(labelValue = stringResource(R.string.password),
                 painterResource = painterResource(id = R.drawable.lock),
                 onTextSelected = {
-
-                }
+                    viewModel.onEvent(UIEvent.EmailChanged(it))
+                },
+                errorStatus = viewModel.registrationUIState.value.passwordError
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -81,8 +96,14 @@ fun Login()  {
     }
 }
 
+@Composable
+fun isInPreview(): Boolean {
+    return LocalInspectionMode.current
+}
+
 @Preview
 @Composable
 fun LoginPreview() {
-    Login()
+    val navController = rememberNavController()
+    Login(navController = navController)
 }

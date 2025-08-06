@@ -12,6 +12,7 @@ okhttp = "4.12.0"
 hilt = "2.48"
 androidx-hilt = "1.1.0"
 coreKtxVersion = "1.16.0"
+navigation = "2.7.7" # or latest
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +39,9 @@ okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx-hilt" }
+
+#jetpack navigation
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVersion" }

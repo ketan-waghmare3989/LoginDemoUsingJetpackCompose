@@ -15,7 +15,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.logindemousingcompose.R
 import com.example.logindemousingcompose.components.ButtonComponent
 import com.example.logindemousingcompose.components.CheckboxComponent
@@ -31,7 +34,7 @@ import com.example.logindemousingcompose.navigation.PostOfficeAppRouter
 import com.example.logindemousingcompose.navigation.Screen
 
 @Composable
-fun SignUp(loginViewModel: LoginViewModel = viewModel()) {
+fun SignUp(navController: NavHostController, loginViewModel: LoginViewModel = hiltViewModel()) {
     Surface(
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
@@ -102,5 +105,6 @@ fun SignUp(loginViewModel: LoginViewModel = viewModel()) {
 @Preview (showBackground = true)
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
-    SignUp()
+    val navController = rememberNavController()
+    SignUp(navController = navController)
 }

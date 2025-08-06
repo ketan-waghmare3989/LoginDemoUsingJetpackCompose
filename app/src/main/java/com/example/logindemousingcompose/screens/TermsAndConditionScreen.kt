@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.logindemousingcompose.R
 import com.example.logindemousingcompose.components.HeadingTextComponent
 import com.example.logindemousingcompose.navigation.PostOfficeAppRouter
@@ -18,7 +20,7 @@ import com.example.logindemousingcompose.navigation.Screen
 import com.example.logindemousingcompose.navigation.SystemBackButtonHandler
 
 @Composable
-fun TermsAndConditionScreen() {
+fun TermsAndConditionScreen(navController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()
         .background(color = Color.White)
         .padding(16.dp)) {
@@ -33,5 +35,6 @@ fun TermsAndConditionScreen() {
 @Preview
 @Composable
 fun TermsAndConditionScreenPreview() {
-    TermsAndConditionScreen()
+    val navController = rememberNavController()
+    TermsAndConditionScreen(navController = navController)
 }

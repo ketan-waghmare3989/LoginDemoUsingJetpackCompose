@@ -115,9 +115,7 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter,onTextSele
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = "")
         },
-
         isError = !errorStatus
-
     )
 }
 

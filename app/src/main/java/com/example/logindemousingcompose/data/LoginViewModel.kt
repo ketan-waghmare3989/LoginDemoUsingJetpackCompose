@@ -1,6 +1,7 @@
 package com.example.logindemousingcompose.data
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,9 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val TAG = LoginViewModel::class.simpleName
+
+    private val _loginSuccess = mutableStateOf(false)
+    val loginSuccess: State<Boolean> = _loginSuccess
 
     var registrationUIState = mutableStateOf(RegistrationUIState())
 
@@ -74,6 +78,7 @@ class LoginViewModel @Inject constructor(
 
                 if(response.isSuccessful) {
                     Log.d(TAG, "Login success: ${response.body()}")
+                    _loginSuccess.value = true // ✅ Set to true on success
                 } else {
                     Log.d(TAG, "Login not success: ${response.body()}")
                 }
