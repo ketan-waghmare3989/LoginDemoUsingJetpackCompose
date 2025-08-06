@@ -50,7 +50,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.logindemousingcompose.R
+import com.example.logindemousingcompose.R;
 import com.example.logindemousingcompose.ui.theme.GrayColor
 import com.example.logindemousingcompose.ui.theme.Secondary
 import com.example.logindemousingcompose.ui.theme.TextColor

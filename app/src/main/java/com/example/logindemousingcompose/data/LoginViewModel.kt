@@ -3,9 +3,17 @@ package com.example.logindemousingcompose.data
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.logindemousingcompose.data.rules.Validator
+import com.example.logindemousingcompose.domain.usecase.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
 
     private val TAG = LoginViewModel::class.simpleName
 
@@ -49,12 +57,77 @@ class LoginViewModel : ViewModel() {
             is UIEvent.RegisterButtonClicked -> {
                 signUpAfterValidation()
             }
+
+            is UIEvent.LoginButtonClicked -> {
+                callLoginAPI()
+            }
+
+        }
+    }
+
+    private fun callLoginAPI() {
+        val state = registrationUIState.value
+        viewModelScope.launch {
+            try {
+                registrationUIState.value = state.copy(isLoading = true)
+                val response = loginUseCase("Ketan", "Ketan@123")
+
+                if(response.isSuccessful) {
+                    Log.d(TAG, "Login success: ${response.body()}")
+                } else {
+                    Log.d(TAG, "Login not success: ${response.body()}")
+                }
+
+                registrationUIState.value = state.copy(
+                    isLoading = false,
+                    token = response.toString()
+                )
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Login failed", e)
+                registrationUIState.value = state.copy(
+                    isLoading = false,
+                    error = e.localizedMessage ?: "Unknown error"
+                )
+            }
         }
     }
 
     private fun signUpAfterValidation() {
         Log.d(TAG,"Inside_signup")
         validateDataWithRules()
+
+        val state = registrationUIState.value
+        if (state.firstNameError || state.lastNameError || state.emailError || state.passwordError) {
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                registrationUIState.value = state.copy(isLoading = true)
+                val response = loginUseCase(registrationUIState.value.email, registrationUIState.value.password)
+                if(response.isSuccessful) {
+                    Log.d(TAG, "Login success: ${response.body()}")
+                    //TODO:store the token to the local storage
+                } else {
+                    Log.d(TAG, "Login not success: ${response.body()}")
+                }
+
+
+
+                registrationUIState.value = state.copy(
+                    isLoading = false,
+                    token = response.toString()
+                )
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Login failed", e)
+                registrationUIState.value = state.copy(
+                    isLoading = false,
+                    error = e.localizedMessage ?: "Unknown error"
+                )
+            }
+        }
     }
 
     private fun validateDataWithRules() {
@@ -85,7 +158,6 @@ class LoginViewModel : ViewModel() {
             emailError = emailResult.status,
             passwordError = passwordResult.status
         )
-
     }
 
     private fun printState() {

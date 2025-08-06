@@ -1,6 +1,5 @@
 package com.example.logindemousingcompose.screens
 
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Surface
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,13 +26,16 @@ import com.example.logindemousingcompose.components.HeadingTextComponent
 import com.example.logindemousingcompose.components.MyTextFieldComponent
 import com.example.logindemousingcompose.components.PasswordTextComponent
 import com.example.logindemousingcompose.components.UnderLinedTextComponent
+import com.example.logindemousingcompose.data.LoginViewModel
+import com.example.logindemousingcompose.data.UIEvent
 import com.example.logindemousingcompose.navigation.PostOfficeAppRouter
 import com.example.logindemousingcompose.navigation.Screen
 
 
 @Composable
-
 fun Login()  {
+    val context = LocalContext.current;
+    val viewModel: LoginViewModel = androidx.hilt.navigation.compose.hiltViewModel() // ✅ Add this line
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -64,7 +67,7 @@ fun Login()  {
 
             Spacer(modifier = Modifier.height(40.dp))
             ButtonComponent(value = stringResource(R.string.login), onButtonClicked = {
-                //TODO will implement later
+                viewModel.onEvent(UIEvent.LoginButtonClicked)
             })
 
             Spacer(modifier = Modifier.height(20.dp))

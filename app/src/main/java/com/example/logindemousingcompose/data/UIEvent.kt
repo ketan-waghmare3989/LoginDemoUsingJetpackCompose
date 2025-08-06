@@ -8,4 +8,7 @@ sealed class UIEvent {
     data class PasswordChanged(val password : String) : UIEvent()
 
     object RegisterButtonClicked : UIEvent()
+
+    object LoginButtonClicked : UIEvent()
+
 }
